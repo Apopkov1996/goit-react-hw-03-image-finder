@@ -25,4 +25,6 @@ const StyledList = styled.ul`
   list-style: none;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
 `;

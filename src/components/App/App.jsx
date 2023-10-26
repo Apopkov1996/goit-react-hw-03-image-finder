@@ -10,23 +10,23 @@ export class App extends React.Component {
     error: null,
     images: [],
     page: 1,
-    per_page: 12,
+    per_page: 40,
     q: '',
     isOpen: false,
     totalPages: 0,
     first_load: false,
   };
 
-  // async componentDidUpdate(_, prevState) {
-  //   const { per_page, page, q } = this.state;
-  //   if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
-  //     this.fetchImages(per_page, page, q);
-  //   }
-  // }
-
   async componentDidMount() {
     const { per_page, page } = this.state;
     this.getImages({ per_page, page });
+  }
+
+  async componentDidUpdate(_, prevState) {
+    const { per_page, page, q } = this.state;
+    if (this.state.page !== prevState.page) {
+      this.getImages({ per_page, page, q });
+    }
   }
 
   getImages = async params => {
@@ -37,8 +37,15 @@ export class App extends React.Component {
 
       const { hits, totalHits } = data;
 
+      console.log(hits.length);
+      console.log(totalHits);
+
       this.setState(prevState => ({ images: [...prevState.images, ...hits] }));
-      this.setState({ totalPages: Math.ceil(totalHits / hits) });
+      this.setState({
+        totalPages: Math.ceil(totalHits / hits.length),
+      });
+      console.log(this.state.totalPages);
+
       this.setState({ loading: false });
     } catch (error) {
       console.log(error);
@@ -54,13 +61,12 @@ export class App extends React.Component {
   };
 
   render() {
-    const { images, total, loading, page } = this.state;
+    const { images, total, loading, page, totalPages } = this.state;
     return (
       <div>
         <Searchbar />
         <ImageGallery images={images} />
-        {}
-        <Button />
+        {totalPages !== page ? <Button onClick={this.handleLoarMore} /> : null}
       </div>
     );
   }
