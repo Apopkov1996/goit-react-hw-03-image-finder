@@ -1,11 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const ImageGalleryItem = ({ ...image }) => {
-  const { webformatURL, type } = image;
+export const ImageGalleryItem = ({
+  webformatURL,
+  type,
+  handleOpenMOdal,
+  largeImageURL,
+}) => {
   return (
     <StyledItem>
-      <StyledImg style={{ objectFit: 'cover' }} src={webformatURL} alt={type} />
+      <StyledImg
+        onClick={() => handleOpenMOdal(largeImageURL)}
+        style={{ objectFit: 'cover' }}
+        src={webformatURL}
+        alt={type}
+      />
     </StyledItem>
   );
 };

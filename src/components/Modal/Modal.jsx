@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Modal = () => {
-  return (
-    <StyledOverlay>
-      <StyledModal></StyledModal>
-    </StyledOverlay>
-  );
-};
+export class Modal extends React.Component {
+  render() {
+    return (
+      <StyledOverlay onClick={this.props.close}>
+        <StyledModal>{this.props.children}</StyledModal>
+      </StyledOverlay>
+    );
+  }
+}
 
 const StyledOverlay = styled.div`
   position: fixed;

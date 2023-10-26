@@ -1,5 +1,6 @@
 import { Button } from 'components/Button/Button';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
+import { Modal } from 'components/Modal/Modal';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import React from 'react';
 import { fetchPhotos } from 'Services/api';
@@ -10,11 +11,12 @@ export class App extends React.Component {
     error: null,
     images: [],
     page: 1,
-    per_page: 40,
+    per_page: 12,
     q: '',
     isOpen: false,
     totalPages: 0,
     first_load: false,
+    imageModal: null,
   };
 
   async componentDidMount() {
@@ -24,27 +26,22 @@ export class App extends React.Component {
 
   async componentDidUpdate(_, prevState) {
     const { per_page, page, q } = this.state;
-    if (this.state.page !== prevState.page) {
+    if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
       this.getImages({ per_page, page, q });
     }
   }
 
   getImages = async params => {
-    const { q, per_page, page } = this.state;
     this.setState({ loading: true });
     try {
       const data = await fetchPhotos(params);
 
       const { hits, totalHits } = data;
 
-      console.log(hits.length);
-      console.log(totalHits);
-
       this.setState(prevState => ({ images: [...prevState.images, ...hits] }));
       this.setState({
         totalPages: Math.ceil(totalHits / hits.length),
       });
-      console.log(this.state.totalPages);
 
       this.setState({ loading: false });
     } catch (error) {
@@ -60,13 +57,41 @@ export class App extends React.Component {
     }));
   };
 
+  handleSubmit = query => {
+    this.setState({
+      q: query,
+      images: [],
+      currentPage: 1,
+    });
+  };
+
+  handleOpenMOdal = largeImageURL => {
+    this.setState(prevState => ({
+      isOpen: !prevState.isOpen,
+      imageModal: largeImageURL,
+    }));
+  };
+
   render() {
-    const { images, total, loading, page, totalPages } = this.state;
+    const { images, total, loading, page, totalPages, imageModal, isOpen } =
+      this.state;
     return (
       <div>
-        <Searchbar />
-        <ImageGallery images={images} />
+        <Searchbar onSubmit={this.handleSubmit} />
+        <ImageGallery handleOpenMOdal={this.handleOpenMOdal} images={images} />
         {totalPages !== page ? <Button onClick={this.handleLoarMore} /> : null}
+        {isOpen ? (
+          <Modal close={this.handleOpenleModal}>
+            <img
+              src={imageModal}
+              alt="Large size of your chosen img"
+              width="100"
+              height="100"
+            />
+          </Modal>
+        ) : null}
+
+        {/* <Modal /> */}
       </div>
     );
   }
