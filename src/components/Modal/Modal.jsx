@@ -2,9 +2,31 @@ import React from 'react';
 import styled from 'styled-components';
 
 export class Modal extends React.Component {
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleCloseKeyDown);
+    document.body.style.overflow = 'hidden';
+  }
+
+  componentWillUnmount() {
+    document.body.style.overflow = 'auto';
+    document.removeEventListener('keydown', this.handleCloseKeyDown);
+  }
+
+  handleCloseKeyDown = e => {
+    if (e.key === 'Escape') {
+      this.props.close();
+    }
+  };
+
+  handleClick = ({ target, currentTarget }) => {
+    if (target === currentTarget) {
+      this.props.close();
+    }
+  };
+
   render() {
     return (
-      <StyledOverlay onClick={this.props.close}>
+      <StyledOverlay onClick={this.handleClick}>
         <StyledModal>{this.props.children}</StyledModal>
       </StyledOverlay>
     );
@@ -27,4 +49,11 @@ const StyledOverlay = styled.div`
 const StyledModal = styled.div`
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
+  img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 10px;
+    objectfit: cover;
+  }
 `;

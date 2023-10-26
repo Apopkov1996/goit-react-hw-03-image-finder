@@ -4,13 +4,13 @@ import styled from 'styled-components';
 export const ImageGalleryItem = ({
   webformatURL,
   type,
-  handleOpenMOdal,
+  handleOpenModal,
   largeImageURL,
 }) => {
   return (
     <StyledItem>
       <StyledImg
-        onClick={() => handleOpenMOdal(largeImageURL)}
+        onClick={() => handleOpenModal(largeImageURL)}
         style={{ objectFit: 'cover' }}
         src={webformatURL}
         alt={type}

@@ -65,7 +65,7 @@ export class App extends React.Component {
     });
   };
 
-  handleOpenMOdal = largeImageURL => {
+  handleOpenModal = largeImageURL => {
     this.setState(prevState => ({
       isOpen: !prevState.isOpen,
       imageModal: largeImageURL,
@@ -78,20 +78,15 @@ export class App extends React.Component {
     return (
       <div>
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery handleOpenMOdal={this.handleOpenMOdal} images={images} />
-        {totalPages !== page ? <Button onClick={this.handleLoarMore} /> : null}
+        <ImageGallery handleOpenModal={this.handleOpenModal} images={images} />
+        {totalPages > page && totalPages !== page && images.length > 0 ? (
+          <Button onClick={this.handleLoarMore} />
+        ) : null}
         {isOpen ? (
-          <Modal close={this.handleOpenleModal}>
-            <img
-              src={imageModal}
-              alt="Large size of your chosen img"
-              width="100"
-              height="100"
-            />
+          <Modal close={this.handleOpenModal}>
+            <img src={imageModal} alt="Large size of your chosen img" />
           </Modal>
         ) : null}
-
-        {/* <Modal /> */}
       </div>
     );
   }

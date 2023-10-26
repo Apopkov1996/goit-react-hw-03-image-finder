@@ -2,13 +2,13 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import React from 'react';
 import styled from 'styled-components';
 
-export const ImageGallery = ({ handleOpenMOdal, images }) => {
+export const ImageGallery = ({ handleOpenModal, images }) => {
   return (
     <div>
       <StyledList>
         {images?.map(image => (
           <ImageGalleryItem
-            handleOpenMOdal={handleOpenMOdal}
+            handleOpenModal={handleOpenModal}
             key={image.id}
             {...image}
           />
