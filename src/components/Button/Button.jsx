@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 export const Button = ({ onClick }) => {
   return (
@@ -34,3 +35,7 @@ const StyledBtn = styled.button`
     background-color: #303f9f;
   }
 `;
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};

@@ -33,3 +33,12 @@ const StyledList = styled.ul`
   margin-bottom: 20px;
   margin-top: 20px;
 `;
+
+ImageGallery.propTypes = {
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    })
+  ),
+  handleOpenModal: PropTypes.func.isRequired,
+};
