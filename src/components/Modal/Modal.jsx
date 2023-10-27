@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 export class Modal extends React.Component {
   componentDidMount() {
@@ -57,3 +58,8 @@ const StyledModal = styled.div`
     objectfit: cover;
   }
 `;
+
+Modal.propTypes = {
+  close: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+};

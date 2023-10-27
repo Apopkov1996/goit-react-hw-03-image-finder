@@ -44,6 +44,8 @@ export class App extends React.Component {
         return toast.warning(
           `Sorry, we could not find any images matching your request`
         );
+      } else {
+        toast.success(`We found ${totalHits} images`);
       }
 
       this.setState(prevState => ({ images: [...prevState.images, ...hits] }));
@@ -53,7 +55,7 @@ export class App extends React.Component {
 
       this.setState({ loading: false });
     } catch (error) {
-      console.log(error);
+      toast.warning(`Oops ${error}`);
     } finally {
       this.setState({ loading: false });
     }
@@ -84,7 +86,6 @@ export class App extends React.Component {
     const { images, total, loading, imageModal, isOpen } = this.state;
     return (
       <div>
-        
         <Searchbar onSubmit={this.handleSubmit} />
         {loading && !images.length ? (
           <Loader />

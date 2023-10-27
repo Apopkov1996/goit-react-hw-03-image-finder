@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 export const ImageGalleryItem = ({
   webformatURL,
@@ -11,9 +12,9 @@ export const ImageGalleryItem = ({
     <StyledItem>
       <StyledImg
         onClick={() => handleOpenModal(largeImageURL)}
-        style={{ objectFit: 'cover' }}
         src={webformatURL}
         alt={type}
+        loading="lazy"
       />
     </StyledItem>
   );
@@ -29,6 +30,7 @@ const StyledImg = styled.img`
   width: 100%;
   height: 260px;
   object-fit: cover;
+
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
@@ -36,3 +38,10 @@ const StyledImg = styled.img`
     cursor: zoom-in;
   }
 `;
+
+ImageGalleryItem.propTypes = {
+  webformatURL: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  handleOpenModal: PropTypes.func.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+};
