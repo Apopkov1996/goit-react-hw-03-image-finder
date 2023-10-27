@@ -21,12 +21,12 @@ export class App extends React.Component {
     imageModal: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { per_page, page } = this.state;
     this.getImages({ per_page, page });
   }
 
-  async componentDidUpdate(_, prevState) {
+  componentDidUpdate(_, prevState) {
     const { per_page, page, q } = this.state;
     if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
       this.getImages({ per_page, page, q });
@@ -45,15 +45,15 @@ export class App extends React.Component {
           `Sorry, we could not find any images matching your request`
         );
       } else {
-        toast.success(`We found ${totalHits} images`);
+        !this.state.total && toast.success(`We found ${totalHits} images`);
       }
 
-      this.setState(prevState => ({ images: [...prevState.images, ...hits] }));
-      this.setState({
+      this.setState(prevState => ({
+        images: [...prevState.images, ...hits],
         total: totalHits,
-      });
+      }));
 
-      this.setState({ loading: false });
+      // this.setState({ loading: false });
     } catch (error) {
       toast.warning(`Oops ${error}`);
     } finally {
@@ -72,6 +72,7 @@ export class App extends React.Component {
       q: query,
       images: [],
       currentPage: 1,
+      total: 0,
     });
   };
 
@@ -83,10 +84,10 @@ export class App extends React.Component {
   };
 
   render() {
-    const { images, total, loading, imageModal, isOpen } = this.state;
+    const { images, total, loading, imageModal, isOpen, q } = this.state;
     return (
       <div>
-        <Searchbar onSubmit={this.handleSubmit} />
+        <Searchbar globalQuery={q} onSubmit={this.handleSubmit} />
         {loading && !images.length ? (
           <Loader />
         ) : (
