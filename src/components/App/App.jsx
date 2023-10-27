@@ -4,6 +4,8 @@ import { Modal } from 'components/Modal/Modal';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import React from 'react';
 import { fetchPhotos } from 'Services/api';
+import { Loader } from 'components/Loader/Loader';
+import { toast } from 'react-toastify';
 
 export class App extends React.Component {
   state = {
@@ -14,7 +16,7 @@ export class App extends React.Component {
     per_page: 12,
     q: '',
     isOpen: false,
-    totalPages: 0,
+    total: 0,
     first_load: false,
     imageModal: null,
   };
@@ -38,9 +40,15 @@ export class App extends React.Component {
 
       const { hits, totalHits } = data;
 
+      if (hits.length === 0) {
+        return toast.warning(
+          `Sorry, we could not find any images matching your request`
+        );
+      }
+
       this.setState(prevState => ({ images: [...prevState.images, ...hits] }));
       this.setState({
-        totalPages: Math.ceil(totalHits / hits.length),
+        total: totalHits,
       });
 
       this.setState({ loading: false });
@@ -73,13 +81,21 @@ export class App extends React.Component {
   };
 
   render() {
-    const { images, total, loading, page, totalPages, imageModal, isOpen } =
-      this.state;
+    const { images, total, loading, imageModal, isOpen } = this.state;
     return (
       <div>
+        
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery handleOpenModal={this.handleOpenModal} images={images} />
-        {totalPages > page && totalPages !== page && images.length > 0 ? (
+        {loading && !images.length ? (
+          <Loader />
+        ) : (
+          <ImageGallery
+            handleOpenModal={this.handleOpenModal}
+            images={images}
+          />
+        )}
+
+        {total > images.length && images.length > 0 ? (
           <Button onClick={this.handleLoarMore} />
         ) : null}
         {isOpen ? (
